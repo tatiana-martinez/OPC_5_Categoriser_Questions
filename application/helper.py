@@ -109,20 +109,21 @@ def filter_2type_wd(tokens):
 
 
 def convert_text_bert(clean_question):
-    # Create sentence and label lists
-    sentences = clean_question.tolist().values
+    # We need to add special tokens at the beginning and end of each sentence for BERT to work properly
+    sentences = ["[CLS] " + sentence + " [SEP]" for sentence in clean_question]
     return sentences
 
 
 def tokens_text_bert(sentences):
-    # We need to add special tokens at the beginning and end of each sentence for BERT to work properly
-    sentences = ["[CLS] " + sentence + " [SEP]" for sentence in sentences]
-    return sentences
+    tokenizer = open_model_bert()
+    tokenized_texts = [tokenizer.tokenize(sent) for sent in sentences]
+    return tokenized_texts
 
 
 def input_id_bert(tokenized_texts):
+    tokenizer = open_model_bert()
     # Use the BERT tokenizer to convert the tokens to their index numbers in the BERT vocabulary
-    input_ids = [open_model_bert().convert_tokens_to_ids(x)
+    input_ids = [tokenizer.convert_tokens_to_ids(x)
                  for x in tokenized_texts]
     # Pad our input tokens
     input_ids = pad_sequences(input_ids, maxlen=128,
