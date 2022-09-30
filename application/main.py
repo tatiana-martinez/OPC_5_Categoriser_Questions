@@ -11,6 +11,10 @@ from helper import open_lda_model
 from helper import pred_tags_lda
 from helper import predict_tags_SVM
 from helper import predict_tags_XGB
+from helper import convert_text_bert
+from helper import tokens_text_bert
+from helper import input_id_bert
+from helper import predict_tags_knn_bert
 
 st.title("Bienvenue sur votre outil de suggestion de tags!")
 
@@ -19,7 +23,7 @@ question = st.text_input(
 #st.write("**Votre question :**", question)
 
 pred_type = ['Unsupervised', 'Supervised_KNN',
-             'Supervised_SVM', 'Supervised_XGBoost']
+             'Supervised_SVM', 'Supervised_XGBoost', 'Supervised_KNN_Bert']
 
 pred = st.radio("2. Choix du type de prédiction :", pred_type)
 #st.write("**Vous avez choisi :**", pred)
@@ -115,3 +119,27 @@ if pred == 'Unsupervised' and val_button:
              unsupervised_model_predict_tags)
 
 #st.write('en construction')
+if pred == 'Supervised_KNN_Bert' and val_button:
+    clean_question = text_cleaning(question)
+
+    token_clean_question = tokenize(clean_question)
+
+    lemma_token_clean_question = lemmatizing(token_clean_question)
+
+    filter_lemma_token_clean_question = filter_2type_wd(
+        lemma_token_clean_question)
+
+    convert_question = convert_text_bert(filter_lemma_token_clean_question)
+    st.write('Votre question "converted" : ', convert_question)
+
+    token_convert_question = tokens_text_bert(convert_question)
+    st.write('Votre question "converted" et "tokenized" : ',
+             token_convert_question)
+
+    id_bert = input_id_bert(token_convert_question)
+    st.write('Votre question "converted", "tokenized" et "vectorised": ',
+             id_bert)
+
+    supervised_model_predict_tags_knn_bert = predict_tags_knn_bert(id_bert)
+    st.write('Voici une proposition de tags en rapport avec votre question : ',
+             unsupervised_model_predict_tags)

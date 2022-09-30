@@ -1,6 +1,7 @@
 import re
 import nltk
 import pickle
+import joblib
 #import gensim
 #import gensim.corpora as corpora
 from nltk.stem import WordNetLemmatizer
@@ -9,6 +10,13 @@ from nltk import word_tokenize
 from nltk.tokenize import sent_tokenize
 import pandas as pd
 import xgboost as xgb
+
+import torch
+from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
+from keras_preprocessing.sequence import pad_sequences
+from sklearn.model_selection import train_test_split
+from pytorch_pretrained_bert import BertTokenizer, BertConfig
+from pytorch_pretrained_bert import BertAdam, BertForSequenceClassification
 
 nltk.download('punkt')
 nltk.download('wordnet')
@@ -100,12 +108,36 @@ def filter_2type_wd(tokens):
     return res
 
 
+def convert_text_bert(clean_question):
+    # Create sentence and label lists
+    sentences = clean_question.tolist().values
+    return sentences
+
+
+def tokens_text_bert(sentences):
+    # We need to add special tokens at the beginning and end of each sentence for BERT to work properly
+    sentences = ["[CLS] " + sentence + " [SEP]" for sentence in sentences]
+    return sentences
+
+
+def input_id_bert(tokenized_texts):
+    # Use the BERT tokenizer to convert the tokens to their index numbers in the BERT vocabulary
+    input_ids = [open_model_bert().convert_tokens_to_ids(x)
+                 for x in tokenized_texts]
+    # Pad our input tokens
+    input_ids = pad_sequences(input_ids, maxlen=128,
+                              dtype="long", truncating="post", padding="post")
+    # df
+    df_input_ids = pd.DataFrame(input_ids)
+    return df_input_ids
+
+
 def open_model():
-    supervised_model = "/Users/tatiana/OpenClass/models/knn_model.pkl"
-    ml_model = "/Users/tatiana/OpenClass/models/ml_model.pkl"
-    tfidf_model = "/Users/tatiana/OpenClass/models/tfidf_model.pkl"
-    pca_model = "/Users/tatiana/OpenClass/models/pca_model.pkl"
-    vocabulary = "/Users/tatiana/OpenClass/models/vocabulary.pkl"
+    supervised_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/knn_model.pkl"
+    ml_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ml_model.pkl"
+    tfidf_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/tfidf_model.pkl"
+    pca_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/pca_model.pkl"
+    vocabulary = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/vocabulary.pkl"
 
     supervised_model = pickle.load(open(supervised_model, 'rb'))
     ml_model = pickle.load(open(ml_model, 'rb'))
@@ -116,46 +148,79 @@ def open_model():
 
 
 def open_model_tfidf():
-    tfidf_model = "/Users/tatiana/OpenClass/models/tfidf_model.pkl"
+    tfidf_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/tfidf_model.pkl"
     tfidf_model = pickle.load(open(tfidf_model, 'rb'))
     return tfidf_model
 
 
+def open_model_bert():
+    bert_model = torch.load(
+        '/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/bert_model')
+    return bert_model
+
+
 def open_vocabulary():
-    vocabulary = "/Users/tatiana/OpenClass/models/vocabulary.pkl"
+    vocabulary = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/vocabulary.pkl"
     vocabulary = pickle.load(open(vocabulary, 'rb'))
     return vocabulary
 
 
+def open_vocabulary_bert():
+    vocabulary_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/bert_vocab.pkl"
+    vocabulary_bert = pickle.load(open(vocabulary_bert, 'rb'))
+    return vocabulary_bert
+
+
 def open_pca():
-    pca_model = "/Users/tatiana/OpenClass/models/pca_model.pkl"
+    pca_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/pca_model.pkl"
     pca_model = pickle.load(open(pca_model, 'rb'))
     return pca_model
 
 
+def open_pca_bert():
+    pca_bert_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/pca_bert_model.pkl"
+    pca_bert_model = pickle.load(open(pca_bert_model, 'rb'))
+    return pca_bert_model
+
+
 def open_supervised_model():
-    supervised_model = "/Users/tatiana/OpenClass/models/knn_model.pkl"
+    supervised_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/knn_model.pkl"
     supervised_model = pickle.load(open(supervised_model, 'rb'))
     return supervised_model
 
 
+def open_supervised_model_knn_bert():
+    supervised_model_knn_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/knn_model_bert.pkl"
+    supervised_model_knn_bert = pickle.load(
+        open(supervised_model_knn_bert, 'rb'))
+    return supervised_model_knn_bert
+
+
 def open_supervised_model_SVM():
-    supervised_model_SVM = "/Users/tatiana/OpenClass/models/svm_model.pkl"
+    supervised_model_SVM = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/svm_model.pkl"
     supervised_model_SVM = pickle.load(open(supervised_model_SVM, 'rb'))
     return supervised_model_SVM
 
 
 def open_supervised_model_XGB():
-    #supervised_model_XGB = "/Users/tatiana/OpenClass/models/xgb_model_tf_idf.pkl"
-    #supervised_model_XGB = pickle.load(open(supervised_model_XGB, 'rb'))
-    supervised_model_XGB = xgb.XGBClassifier()
-    supervised_model_XGB.load_model(
-        '/Users/tatiana/OpenClass/models/xgb_model_tf_idf.json')
-    return supervised_model_XGB
+    supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf.json"
+    supervised_model_XGB = pickle.load(open(supervised_model_XGB, 'rb'))
+
+    #supervised_model_XGB = xgb.XGBClassifier()
+    # supervised_model_XGB.load_model(
+    #    '/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf.json')
+
+    #supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib"
+    #supervised_model_XGB = joblib.load(open(supervised_model_XGB, 'rb'))
+
+   # supervised_model_XGB = XGBClassifier()
+   # supervised_model_XGB.load_model(
+    #    '/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib')
+    # return supervised_model_XGB
 
 
 def open_ml_model():
-    ml_model = "/Users/tatiana/OpenClass/models/ml_model.pkl"
+    ml_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ml_model.pkl"
     ml_model = pickle.load(open(ml_model, 'rb'))
     return ml_model
 
@@ -173,6 +238,28 @@ def predict_tags(text):
     input_vector = open_model_tfidf().transform(text)
     input_vector = pd.DataFrame(input_vector.toarray())
     input_vector = open_pca().transform(input_vector)
+    res = open_supervised_model().predict(input_vector)
+    res = open_ml_model().inverse_transform(res)
+    res = list(
+        {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
+    res = [tag for tag in res if tag in text]
+
+    return res
+
+
+def predict_tags_knn_bert(df):
+    """
+    Predict tags according to a lemmatized text using a supervied model.
+
+    Args:
+        supervised_model(): Used mode to get prediction
+        mlb_model(): Used model to detransform
+    Returns:
+        res(list): List of predicted tags
+    """
+    #input_vector = open_model_tfidf().transform(text)
+    input_vector = df
+    input_vector = open_pca_bert().transform(df)
     res = open_supervised_model().predict(input_vector)
     res = open_ml_model().inverse_transform(res)
     res = list(
@@ -227,13 +314,13 @@ def predict_tags_XGB(text):
 
 
 def open_lda_dictionary():
-    lda_dic = "/Users/tatiana/OpenClass/models/dictionary.pkl"
+    lda_dic = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/dictionary.pkl"
     lda_dic = pickle.load(open(lda_dic, 'rb'))
     return lda_dic
 
 
 def open_lda_model():
-    lda_model = "/Users/tatiana/OpenClass/models/lda_model.pkl"
+    lda_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/lda_model.pkl"
     lda_model = pickle.load(open(lda_model, 'rb'))
     return lda_model
 
