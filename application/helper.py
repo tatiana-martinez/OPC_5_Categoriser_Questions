@@ -2,12 +2,15 @@ import re
 import nltk
 import pickle
 import joblib
+import sklearn
 #import gensim
 #import gensim.corpora as corpora
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk import word_tokenize
 from nltk.tokenize import sent_tokenize
+from sklearn.neighbors import _dist_metrics
+
 import pandas as pd
 import xgboost as xgb
 
@@ -258,15 +261,17 @@ def predict_tags_knn_bert(df):
     Returns:
         res(list): List of predicted tags
     """
-    #input_vector = open_model_tfidf().transform(text)
+    model_knn_bert = open_supervised_model_knn_bert()
+    model_ml = open_ml_model()
     input_vector = df
     input_vector = open_pca_bert().transform(df)
-    res = open_supervised_model().predict(input_vector)
-    res = open_ml_model().inverse_transform(res)
-    res = list(
-        {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
-    res = [tag for tag in res if tag in text]
+    res = model_knn_bert.predict(input_vector)
+    res = model_ml.inverse_transform(res)
 
+    #res = res[0:5]
+    # res = list(
+    #    {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
+    #res = [tag for tag in res if tag in text]
     return res
 
 

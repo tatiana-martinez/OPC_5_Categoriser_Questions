@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from sklearn.neighbors import _dist_metrics
 from helper import text_cleaning
 from helper import tokenize
 from helper import lemmatizing
@@ -142,4 +143,4 @@ if pred == 'Supervised_KNN_Bert' and val_button:
 
     supervised_model_predict_tags_knn_bert = predict_tags_knn_bert(id_bert)
     st.write('Voici une proposition de tags en rapport avec votre question : ',
-             unsupervised_model_predict_tags)
+             supervised_model_predict_tags_knn_bert)
