@@ -53,7 +53,7 @@ if pred == 'Supervised_KNN' and val_button:
 
     supervised_model_predict_tags = predict_tags(
         filter_lemma_token_clean_question)
-    st.write('Voici une proposition de tags en rapport avec votre question : ',
+    st.write('Voici une proposition de tags en rapport avec votre question :: ',
              supervised_model_predict_tags)
 
 if pred == 'Supervised_SVM' and val_button:
