@@ -213,15 +213,15 @@ def open_supervised_model_SVM():
 
 
 def open_supervised_model_XGB():
-    supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf.pkl"
-    supervised_model_XGB = pickle.load(open(supervised_model_XGB, 'rb'))
+    #supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf.pkl"
+    #supervised_model_XGB = pickle.load(open(supervised_model_XGB, 'rb'))
 
     #supervised_model_XGB = xgb.XGBClassifier()
     # supervised_model_XGB.load_model(
     #    '/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf.json')
 
-    #supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib"
-    #supervised_model_XGB = joblib.load(open(supervised_model_XGB, 'rb'))
+    supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib"
+    supervised_model_XGB = joblib.load(open(supervised_model_XGB, 'rb'))
 
    # supervised_model_XGB = XGBClassifier()
    # supervised_model_XGB.load_model(
@@ -313,12 +313,12 @@ def tfidf_pca_XGB(text):
 
     model_tfidf = open_model_tfidf()
     model_pca_xgb = open_pca_xgb_model()
-    model_XGB = open_supervised_model_XGB()
 
     input_vector = model_tfidf.transform(text)
     input_vector = pd.DataFrame(input_vector.toarray())
     input_vector = model_pca_xgb.transform(input_vector)
-    t = type(input_vector)
+    #l_input_vector = input_vector.shape
+    #t = type(input_vector)
     return input_vector
 
 
