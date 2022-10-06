@@ -11,12 +11,14 @@ from helper import open_lda_dictionary
 from helper import open_lda_model
 from helper import pred_tags_lda
 from helper import predict_tags_SVM
+from helper import predict_proba_XGB
 from helper import predict_tags_XGB
 from helper import convert_text_bert
 from helper import tokens_text_bert
 from helper import input_id_bert
 from helper import predict_tags_knn_bert
 from helper import tfidf_pca_XGB
+from helper import top_200_tags
 
 st.title("Bienvenue sur votre outil de suggestion de tags!")
 
@@ -98,10 +100,19 @@ if pred == 'Supervised_XGBoost' and val_button:
     st.write('Votre question "cleaned", "tokenized", "lemmatized", "filtered", "TFIDF" et "PCA" : ',
              filter_lemma_token_clean_question_tfidf_pca_XGB)
 
-    supervised_model_predict_tags_XGB = predict_tags_XGB(
+    supervised_model_predict_proba_XGB = predict_proba_XGB(
         filter_lemma_token_clean_question_tfidf_pca_XGB)
-    st.write('Voici une proposition de tags en rapport avec votre question : ',
-             supervised_model_predict_tags_XGB)
+    st.write('Voici le résultat en probabilité pour chaque token de la question : ',
+             supervised_model_predict_proba_XGB)
+
+    predict_tags_XGB = predict_tags_XGB(
+        supervised_model_predict_proba_XGB, top_200_tags=top_200_tags())
+    st.write('Voici le résultat des tags : ',
+             predict_tags_XGB)
+    #top_200_tags = top_200_tags()
+    # st.write('Voici tags_200 : ',
+    #        top_200_tags)
+
 
 if pred == 'Unsupervised' and val_button:
 

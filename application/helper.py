@@ -3,6 +3,7 @@ import nltk
 import pickle
 import joblib
 import sklearn
+import numpy as np
 #import gensim
 #import gensim.corpora as corpora
 from nltk.stem import WordNetLemmatizer
@@ -236,9 +237,9 @@ def open_ml_model():
 
 
 def top_200_tags():
-    top_200_tags = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/data/df_top200_tags.pkl"
-    top_200_tags = pickle.load(open(top_200_tags, 'rb'))
-    return top_200_tags
+    top_200_tags = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/data/df_top200_tags.csv"
+    df_top_200_tags = pd.read_csv(top_200_tags)
+    return df_top_200_tags
 
 
 def predict_tags(text):
@@ -322,24 +323,32 @@ def tfidf_pca_XGB(text):
     return input_vector
 
 
-def predict_tags_XGB(text):
+def predict_proba_XGB(text):
     model_XGB = open_supervised_model_XGB()
 
-    #n = 5
-    # x = len(text)  # X_test.shape[0]
+    # X_test.shape[0]
     #print("longueur du texte : {x}")
-    #top_200_tags = top_200_tags()
-    #df_top200_tags = top_200_tags.T
+
     #print("Top 200 tags : {df_top200_tags}")
 
     ovc_xgb_preds_proba = model_XGB.predict_proba(text)
 
-    #top_n_lables_idx = np.argsort(-ovc_xgb_preds_proba, axis=1)[:, :n]
-    #top_n_probs = np.round(-np.sort(-ovc_xgb_preds_proba), 3)[:, :n]
-    #top_n_labels = [model_XGB.classes_[i] for i in top_n_lables_idx]
-    # top_n_tags = [[df_top200_tags.iloc[0, top_n_labels[j][i]]
-    #               for i in range(0, n)]for j in range(0, x)]
-    return ovc_xgb_preds_proba  # top_n_tags
+    return ovc_xgb_preds_proba
+
+
+def predict_tags_XGB(predict_proba_XGB, top_200_tags):
+    n = 5
+    x = predict_proba_XGB.shape[0]
+    model_XGB = open_supervised_model_XGB()
+
+    top_n_lables_idx = np.argsort(-predict_proba_XGB, axis=1)[:, :n]
+    np.round(-np.sort(-predict_proba_XGB), 3)[:, :n]
+    top_n_labels = [model_XGB.classes_[i] for i in top_n_lables_idx]
+
+    top200_tags_T = top_200_tags.T
+    top_n_tags = [[top200_tags_T.iloc[0, top_n_labels[j][0]]]
+                  for j in range(0, x)]  # for i in range(0, n)
+    return top_n_tags  # top_n_labels
 
 
 def open_lda_dictionary():
