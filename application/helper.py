@@ -181,6 +181,12 @@ def open_pca():
     return pca_model
 
 
+def open_pca_xgb_model():
+    pca_xgb_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/pca_tfidf_xgb_model.pkl"
+    pca_xgb_model = pickle.load(open(pca_xgb_model, 'rb'))
+    return pca_xgb_model
+
+
 def open_pca_bert():
     pca_bert_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/pca_bert_model.pkl"
     pca_bert_model = pickle.load(open(pca_bert_model, 'rb'))
@@ -207,7 +213,7 @@ def open_supervised_model_SVM():
 
 
 def open_supervised_model_XGB():
-    supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf.json"
+    supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf.pkl"
     supervised_model_XGB = pickle.load(open(supervised_model_XGB, 'rb'))
 
     #supervised_model_XGB = xgb.XGBClassifier()
@@ -220,13 +226,19 @@ def open_supervised_model_XGB():
    # supervised_model_XGB = XGBClassifier()
    # supervised_model_XGB.load_model(
     #    '/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib')
-    # return supervised_model_XGB
+    return supervised_model_XGB
 
 
 def open_ml_model():
     ml_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ml_model.pkl"
     ml_model = pickle.load(open(ml_model, 'rb'))
     return ml_model
+
+
+def top_200_tags():
+    top_200_tags = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/data/df_top200_tags.pkl"
+    top_200_tags = pickle.load(open(top_200_tags, 'rb'))
+    return top_200_tags
 
 
 def predict_tags(text):
@@ -297,26 +309,37 @@ def predict_tags_SVM(text):
     return res
 
 
-def predict_tags_XGB(text):
-    """
-    Predict tags according to a lemmatized text using a supervied model.
+def tfidf_pca_XGB(text):
 
-    Args:
-        supervised_model(): Used mode to get prediction
-        mlb_model(): Used model to detransform
-    Returns:
-        res(list): List of predicted tags
-    """
-    input_vector = open_model_tfidf().transform(text)
+    model_tfidf = open_model_tfidf()
+    model_pca_xgb = open_pca_xgb_model()
+    model_XGB = open_supervised_model_XGB()
+
+    input_vector = model_tfidf.transform(text)
     input_vector = pd.DataFrame(input_vector.toarray())
-    input_vector = open_pca().transform(input_vector)
-    res = open_supervised_model_XGB().predict(input_vector)
-    res = open_ml_model().inverse_transform(res)
-    res = list(
-        {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
-    res = [tag for tag in res if tag in text]
+    input_vector = model_pca_xgb.transform(input_vector)
+    t = type(input_vector)
+    return input_vector
 
-    return res
+
+def predict_tags_XGB(text):
+    model_XGB = open_supervised_model_XGB()
+
+    #n = 5
+    # x = len(text)  # X_test.shape[0]
+    #print("longueur du texte : {x}")
+    #top_200_tags = top_200_tags()
+    #df_top200_tags = top_200_tags.T
+    #print("Top 200 tags : {df_top200_tags}")
+
+    ovc_xgb_preds_proba = model_XGB.predict_proba(text)
+
+    #top_n_lables_idx = np.argsort(-ovc_xgb_preds_proba, axis=1)[:, :n]
+    #top_n_probs = np.round(-np.sort(-ovc_xgb_preds_proba), 3)[:, :n]
+    #top_n_labels = [model_XGB.classes_[i] for i in top_n_lables_idx]
+    # top_n_tags = [[df_top200_tags.iloc[0, top_n_labels[j][i]]
+    #               for i in range(0, n)]for j in range(0, x)]
+    return ovc_xgb_preds_proba  # top_n_tags
 
 
 def open_lda_dictionary():

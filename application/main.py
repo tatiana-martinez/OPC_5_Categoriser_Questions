@@ -16,6 +16,7 @@ from helper import convert_text_bert
 from helper import tokens_text_bert
 from helper import input_id_bert
 from helper import predict_tags_knn_bert
+from helper import tfidf_pca_XGB
 
 st.title("Bienvenue sur votre outil de suggestion de tags!")
 
@@ -92,8 +93,13 @@ if pred == 'Supervised_XGBoost' and val_button:
     st.write('Votre question "cleaned", "tokenized", "lemmatized" et "filtered" : ',
              filter_lemma_token_clean_question)
 
-    supervised_model_predict_tags_XGB = predict_tags_XGB(
+    filter_lemma_token_clean_question_tfidf_pca_XGB = tfidf_pca_XGB(
         filter_lemma_token_clean_question)
+    st.write('Votre question "cleaned", "tokenized", "lemmatized", "filtered", "TFIDF" et "PCA" : ',
+             filter_lemma_token_clean_question_tfidf_pca_XGB)
+
+    supervised_model_predict_tags_XGB = predict_tags_XGB(
+        filter_lemma_token_clean_question_tfidf_pca_XGB)
     st.write('Voici une proposition de tags en rapport avec votre question : ',
              supervised_model_predict_tags_XGB)
 
