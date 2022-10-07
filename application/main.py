@@ -12,13 +12,14 @@ from helper import open_lda_model
 from helper import pred_tags_lda
 from helper import predict_tags_SVM
 from helper import predict_proba_XGB
-from helper import predict_tags_XGB
+from helper import predict_5tags_XGB
 from helper import convert_text_bert
 from helper import tokens_text_bert
 from helper import input_id_bert
 from helper import predict_tags_knn_bert
 from helper import tfidf_pca_XGB
 from helper import top_200_tags
+from helper import predict_tags_XGB
 
 st.title("Bienvenue sur votre outil de suggestion de tags!")
 
@@ -105,10 +106,15 @@ if pred == 'Supervised_XGBoost' and val_button:
     st.write('Voici le résultat en probabilité pour chaque token de la question : ',
              supervised_model_predict_proba_XGB)
 
-    predict_tags_XGB = predict_tags_XGB(
+    predict_5tags_XGB = predict_5tags_XGB(
         supervised_model_predict_proba_XGB, top_200_tags=top_200_tags())
-    st.write('Voici le résultat des tags : ',
+    st.write('Voici le résultat des 5 premiers tags par tokens : ',
+             predict_5tags_XGB)
+
+    predict_tags_XGB = predict_tags_XGB(predict_5tags_XGB)
+    st.write('Voici le résultat des 5 premiers tags : ',
              predict_tags_XGB)
+
     #top_200_tags = top_200_tags()
     # st.write('Voici tags_200 : ',
     #        top_200_tags)
