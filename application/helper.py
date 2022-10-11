@@ -213,6 +213,10 @@ def open_supervised_model_SVM():
     supervised_model_SVM = pickle.load(open(supervised_model_SVM, 'rb'))
     return supervised_model_SVM
 
+def open_supervised_model_svm_bert():
+    supervised_model_svm_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/svm_model_bert.pkl"
+    supervised_model_svm_bert = pickle.load(open(supervised_model_svm_bert, 'rb'))
+    return supervised_model_svm_bert
 
 def open_supervised_model_XGB():
     # supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf.pkl"
@@ -230,6 +234,14 @@ def open_supervised_model_XGB():
     #    '/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib')
     return supervised_model_XGB
 
+def open_supervised_model_XGB():
+    supervised_model_XGB_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ovc_xgb_bert.pkl"
+    supervised_model_XGB_bert = pickle.load(open(supervised_model_XGB_bert, 'rb'))
+
+    #supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib"
+    #supervised_model_XGB = joblib.load(open(supervised_model_XGB, 'rb'))
+
+    return supervised_model_XGB
 
 def open_ml_model():
     ml_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ml_model.pkl"
@@ -277,7 +289,7 @@ def predict_tags_knn_bert(df):
     """
     model_knn_bert = open_supervised_model_knn_bert()
     model_ml = open_ml_model()
-    input_vector = df
+    #input_vector = df
     input_vector = open_pca_bert().transform(df)
     res = model_knn_bert.predict(input_vector)
     res = model_ml.inverse_transform(res)
@@ -308,6 +320,28 @@ def predict_tags_SVM(text):
         {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
     res = [tag for tag in res if tag in text]
 
+    return res
+
+def predict_tags_svm_bert(df):
+    """
+    Predict tags according to a lemmatized text using a supervied model.
+
+    Args:
+        supervised_model(): Used mode to get prediction
+        mlb_model(): Used model to detransform
+    Returns:
+        res(list): List of predicted tags
+    """
+    model_svm_bert = open_supervised_model_svm_bert()
+    model_ml = open_ml_model()
+    #input_vector = df
+    input_vector = open_pca_bert().transform(df)
+    res = model_svm_bert.predict(input_vector)
+    res = model_ml.inverse_transform(res)
+
+    res = res[0:5]
+    res = list({tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
+    res = [tag for tag in res if tag in text]
     return res
 
 
