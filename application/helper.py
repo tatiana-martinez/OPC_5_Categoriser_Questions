@@ -202,8 +202,8 @@ def open_supervised_model():
 
 
 def open_supervised_model_knn_bert():
-    supervised_model_knn_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/knn_model_bert.pkl"
-    supervised_model_knn_bert = pickle.load(
+    supervised_model_knn_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/knn_model_bert1.joblib"
+    supervised_model_knn_bert = joblib.load(
         open(supervised_model_knn_bert, 'rb'))
     return supervised_model_knn_bert
 
@@ -282,8 +282,12 @@ def predict_tags(text):
 
     return res
 
+def pca_transform_knn_bert(df):
+    input_vector = open_pca_bert().transform(df)
+    return input_vector
 
-def predict_tags_knn_bert(df):
+
+def predict_tags_knn_bert(input_vector):
     """
     Predict tags according to a lemmatized text using a supervied model.
 
@@ -293,18 +297,15 @@ def predict_tags_knn_bert(df):
     Returns:
         res(list): List of predicted tags
     """
-    model_knn_bert = open_supervised_model_knn_bert()
-    model_ml = open_ml_model()
-    #input_vector = df
-    input_vector = open_pca_bert().transform(df)
-    res = model_knn_bert.predict(input_vector)
-    res = model_ml.inverse_transform(res)
+    #input_vector = open_pca_bert().transform(df)
+    res = open_supervised_model_knn_bert().predict(input_vector)
+    #res = open_ml_model().inverse_transform(res)
 
-    # res = res[0:5]
-    # res = list(
+    #res = res[0:5]
+    #res = list(
     #    {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
-    # res = [tag for tag in res if tag in text]
-    return res
+    #res = [tag for tag in res if tag in text]
+    return  res
 
 
 def predict_tags_SVM(text):

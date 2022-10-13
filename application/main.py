@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from sklearn.neighbors import _dist_metrics
+#from sklearn.neighbors import _dist_metrics
 from helper import text_cleaning
 from helper import tokenize
 from helper import lemmatizing
@@ -23,6 +23,9 @@ from helper import predict_tags_XGB
 from helper import predict_tags_svm_bert
 from helper import predict_alltags_svm_bert
 from helper import predict_tags_XGB_bert
+#from helper import open_supervised_model_knn_bert
+from helper import pca_transform_knn_bert
+
 
 st.title("Bienvenue sur votre outil de suggestion de tags!")
 
@@ -168,8 +171,12 @@ if pred == 'Supervised_KNN_Bert' and val_button:
     id_bert = input_id_bert(token_convert_question)
     st.write('Votre question "converted", "tokenized" et "vectorised": ',
              id_bert)
-
-    supervised_model_predict_tags_knn_bert = predict_tags_knn_bert(id_bert)
+    
+    pca_transform_knn_bert = pca_transform_knn_bert(id_bert)
+    st.write('Votre question "converted", "tokenized", "vectorised", "pca transformed": ',
+             pca_transform_knn_bert)
+   
+    supervised_model_predict_tags_knn_bert = predict_tags_knn_bert(pca_transform_knn_bert)
     st.write('Voici une proposition de tags en rapport avec votre question : ',
              supervised_model_predict_tags_knn_bert)
 
