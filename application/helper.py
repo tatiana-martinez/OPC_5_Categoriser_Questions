@@ -234,14 +234,14 @@ def open_supervised_model_XGB():
     #    '/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib')
     return supervised_model_XGB
 
-def open_supervised_model_XGB():
+def open_supervised_model_xgb_bert():
     supervised_model_XGB_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ovc_xgb_bert.pkl"
     supervised_model_XGB_bert = pickle.load(open(supervised_model_XGB_bert, 'rb'))
 
     #supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib"
     #supervised_model_XGB = joblib.load(open(supervised_model_XGB, 'rb'))
 
-    return supervised_model_XGB
+    return supervised_model_XGB_bert
 
 def open_ml_model():
     ml_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ml_model.pkl"
@@ -358,6 +358,7 @@ def tfidf_pca_XGB(text):
     return input_vector
 
 
+
 def predict_proba_XGB(text):
     model_XGB = open_supervised_model_XGB()
 
@@ -402,6 +403,28 @@ def predict_tags_XGB(top_n_tags):
                      count in collections.Counter(flat_list).items() if count > 1]
 
     return notduplicates
+
+def predict_tags_XGB_bert(df):
+    """
+    Predict tags according to a lemmatized text using a supervied model.
+
+    Args:
+        supervised_model(): Used mode to get prediction
+        mlb_model(): Used model to detransform
+    Returns:
+        res(list): List of predicted tags
+    """
+    model_xgb_bert = open_supervised_model_xgb_bert()
+    model_ml = open_ml_model()
+    #input_vector = df
+    input_vector = open_pca_bert().transform(df)
+    res = model_xgb_bert.predict(input_vector)
+    res = model_ml.inverse_transform(res)
+
+    res = res[0:5]
+    res = list({tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
+    res = [tag for tag in res if tag in text]
+    return res
 
 
 def open_lda_dictionary():
