@@ -21,6 +21,7 @@ from helper import tfidf_pca_XGB
 from helper import top_200_tags
 from helper import predict_tags_XGB
 from helper import predict_tags_svm_bert
+from helper import predict_alltags_svm_bert
 from helper import predict_tags_XGB_bert
 
 st.title("Bienvenue sur votre outil de suggestion de tags!")
@@ -193,9 +194,15 @@ if pred == 'Supervised_SVM_Bert' and val_button:
     st.write('Votre question "converted", "tokenized" et "vectorised": ',
              id_bert)
 
-    supervised_model_predict_tags_svm_bert = predict_tags_svm_bert(id_bert)
+    supervised_model_predict_alltags_svm_bert = predict_alltags_svm_bert(
+        id_bert)
+    st.write('Voici une liste de tags en rapport avec votre question : ',
+             supervised_model_predict_alltags_svm_bert)
+
+    bert = predict_tags_svm_bert(
+        supervised_model_predict_alltags_svm_bert)
     st.write('Voici une proposition de tags en rapport avec votre question : ',
-             supervised_model_predict_tags_svm_bert)
+             bert)
 
 if pred == 'Supervised_XGBoost_Bert' and val_button:
     clean_question = text_cleaning(question)

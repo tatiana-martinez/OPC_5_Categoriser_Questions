@@ -11,7 +11,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk import word_tokenize
 from nltk.tokenize import sent_tokenize
-from sklearn.neighbors import _dist_metrics
+#from sklearn.neighbors import _dist_metrics
 
 import pandas as pd
 import xgboost as xgb
@@ -213,10 +213,13 @@ def open_supervised_model_SVM():
     supervised_model_SVM = pickle.load(open(supervised_model_SVM, 'rb'))
     return supervised_model_SVM
 
+
 def open_supervised_model_svm_bert():
     supervised_model_svm_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/svm_model_bert.pkl"
-    supervised_model_svm_bert = pickle.load(open(supervised_model_svm_bert, 'rb'))
+    supervised_model_svm_bert = pickle.load(
+        open(supervised_model_svm_bert, 'rb'))
     return supervised_model_svm_bert
+
 
 def open_supervised_model_XGB():
     # supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf.pkl"
@@ -234,14 +237,17 @@ def open_supervised_model_XGB():
     #    '/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib')
     return supervised_model_XGB
 
+
 def open_supervised_model_xgb_bert():
     supervised_model_XGB_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ovc_xgb_bert.pkl"
-    supervised_model_XGB_bert = pickle.load(open(supervised_model_XGB_bert, 'rb'))
+    supervised_model_XGB_bert = pickle.load(
+        open(supervised_model_XGB_bert, 'rb'))
 
     #supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib"
     #supervised_model_XGB = joblib.load(open(supervised_model_XGB, 'rb'))
 
     return supervised_model_XGB_bert
+
 
 def open_ml_model():
     ml_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ml_model.pkl"
@@ -322,7 +328,8 @@ def predict_tags_SVM(text):
 
     return res
 
-def predict_tags_svm_bert(df):
+
+def predict_alltags_svm_bert(df):
     """
     Predict tags according to a lemmatized text using a supervied model.
 
@@ -340,9 +347,21 @@ def predict_tags_svm_bert(df):
     res = model_ml.inverse_transform(res)
 
     res = res[0:5]
-    res = list({tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
-    res = [tag for tag in res if tag in text]
+    #res = res[0:5]
+    #res = list({tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
+    # res = [tag for tag in res if tag in df]#text
     return res
+
+
+def predict_tags_svm_bert(res):
+    # flat list
+    flat_list = [item for sublist in res for item in sublist]
+    flat_list = flat_list[0:5]
+    # not duplicates in flat list
+    # notduplicates = [item for item,
+    #                 count in collections.Counter(flat_list).items() if count > 1]
+
+    return flat_list  # notduplicates
 
 
 def tfidf_pca_XGB(text):
@@ -356,7 +375,6 @@ def tfidf_pca_XGB(text):
     # l_input_vector = input_vector.shape
     # t = type(input_vector)
     return input_vector
-
 
 
 def predict_proba_XGB(text):
@@ -404,6 +422,7 @@ def predict_tags_XGB(top_n_tags):
 
     return notduplicates
 
+
 def predict_tags_XGB_bert(df):
     """
     Predict tags according to a lemmatized text using a supervied model.
@@ -422,7 +441,8 @@ def predict_tags_XGB_bert(df):
     res = model_ml.inverse_transform(res)
 
     res = res[0:5]
-    res = list({tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
+    res = list(
+        {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
     res = [tag for tag in res if tag in text]
     return res
 
