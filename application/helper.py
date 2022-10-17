@@ -11,7 +11,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk import word_tokenize
 from nltk.tokenize import sent_tokenize
-#from sklearn.neighbors import _dist_metrics
+# from sklearn.neighbors import _dist_metrics
 
 import pandas as pd
 import xgboost as xgb
@@ -202,8 +202,8 @@ def open_supervised_model():
 
 
 def open_supervised_model_knn_bert():
-    supervised_model_knn_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/knn_model_bert1.joblib"
-    supervised_model_knn_bert = joblib.load(
+    supervised_model_knn_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/knn_model_bert1.pkl"
+    supervised_model_knn_bert = pickle.load(
         open(supervised_model_knn_bert, 'rb'))
     return supervised_model_knn_bert
 
@@ -243,8 +243,8 @@ def open_supervised_model_xgb_bert():
     supervised_model_XGB_bert = pickle.load(
         open(supervised_model_XGB_bert, 'rb'))
 
-    #supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib"
-    #supervised_model_XGB = joblib.load(open(supervised_model_XGB, 'rb'))
+    # supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib"
+    # supervised_model_XGB = joblib.load(open(supervised_model_XGB, 'rb'))
 
     return supervised_model_XGB_bert
 
@@ -282,6 +282,7 @@ def predict_tags(text):
 
     return res
 
+
 def pca_transform_knn_bert(df):
     input_vector = open_pca_bert().transform(df)
     return input_vector
@@ -297,15 +298,15 @@ def predict_tags_knn_bert(input_vector):
     Returns:
         res(list): List of predicted tags
     """
-    #input_vector = open_pca_bert().transform(df)
+    # input_vector = open_pca_bert().transform(df)
     res = open_supervised_model_knn_bert().predict(input_vector)
-    #res = open_ml_model().inverse_transform(res)
+    res = open_ml_model().inverse_transform(res)
 
-    #res = res[0:5]
-    #res = list(
+    res = res[0:5]
+    # res = list(
     #    {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
-    #res = [tag for tag in res if tag in text]
-    return  res
+    # res = [tag for tag in res if tag in text]
+    return res
 
 
 def predict_tags_SVM(text):
@@ -330,7 +331,7 @@ def predict_tags_SVM(text):
     return res
 
 
-def predict_alltags_svm_bert(df):
+def predict_alltags_svm_bert(df, clean_question):
     """
     Predict tags according to a lemmatized text using a supervied model.
 
@@ -342,27 +343,37 @@ def predict_alltags_svm_bert(df):
     """
     model_svm_bert = open_supervised_model_svm_bert()
     model_ml = open_ml_model()
-    #input_vector = df
     input_vector = open_pca_bert().transform(df)
     res = model_svm_bert.predict(input_vector)
     res = model_ml.inverse_transform(res)
 
     res = res[0:5]
-    #res = res[0:5]
-    #res = list({tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
-    # res = [tag for tag in res if tag in df]#text
-    return res
-
-
-def predict_tags_svm_bert(res):
-    # flat list
+    # flat list of res
     flat_list = [item for sublist in res for item in sublist]
-    flat_list = flat_list[0:5]
-    # not duplicates in flat list
-    # notduplicates = [item for item,
-    #                 count in collections.Counter(flat_list).items() if count > 1]
+    # tags in flag list and in clean_question
+    tags_flat_clean = [tag for tag in flat_list if tag in clean_question]
 
-    return flat_list  # notduplicates
+    len_tags_flat_clean = len(tags_flat_clean)
+
+    nb = 5-len_tags_flat_clean
+    flat_list[0:nb]
+    if nb > 0 & nb < 5:
+        tags = tags_flat_clean + flat_list[0:nb]
+        print("cas1")
+        print(nb)
+        print(tags)
+    elif nb == 0:
+        tags = tags_flat_clean[0:5]
+        print("cas2")
+        print(nb)
+        print(tags)
+    else:
+        tags = flat_list[0:5]
+        print("cas3")
+        print(nb)
+        print(tags)
+
+    return tags
 
 
 def tfidf_pca_XGB(text):
@@ -396,15 +407,15 @@ def predict_5tags_XGB(predict_proba_XGB, top_200_tags):
     x = predict_proba_XGB.shape[0]
     model_XGB = open_supervised_model_XGB()
 
-    top_n_lables_idx = np.argsort(-predict_proba_XGB, axis=1)[:, :n]
-    np.round(-np.sort(-predict_proba_XGB), 3)[:, :n]
+    top_n_lables_idx = np.argsort(-predict_proba_XGB, axis=1)[:, : n]
+    np.round(-np.sort(-predict_proba_XGB), 3)[:, : n]
     top_n_labels = [model_XGB.classes_[i] for i in top_n_lables_idx]
 
     top200_tags_T = top_200_tags.T
     top_n_tags = [[top200_tags_T.iloc[0, top_n_labels[j][i]]
                    for i in range(0, n)] for j in range(0, x)]
     # flat list
-    #flat_list = [item for sublist in top_n_tags for item in sublist]
+    # flat_list = [item for sublist in top_n_tags for item in sublist]
 
     # not duplicates in flat list
     # notduplicates = [item for item,
@@ -436,12 +447,12 @@ def predict_tags_XGB_bert(df):
     """
     model_xgb_bert = open_supervised_model_xgb_bert()
     model_ml = open_ml_model()
-    #input_vector = df
+    # input_vector = df
     input_vector = open_pca_bert().transform(df)
     res = model_xgb_bert.predict(input_vector)
     res = model_ml.inverse_transform(res)
 
-    res = res[0:5]
+    res = res[0: 5]
     res = list(
         {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
     res = [tag for tag in res if tag in text]
