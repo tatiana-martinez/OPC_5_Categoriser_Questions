@@ -26,6 +26,7 @@ nltk.download('wordnet')
 nltk.download('omw-1.4')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('universal_tagset')
+nltk.download('stopwords')
 
 
 def text_cleaning(text):
