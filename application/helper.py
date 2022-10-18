@@ -282,9 +282,11 @@ def predict_tags_knn_bert(input_vector):
         res(list): List of predicted tags
     """
     res = open_supervised_model_knn_bert().predict(input_vector)
-    #res = open_ml_model().inverse_transform(res)
+    res = open_ml_model().inverse_transform(res)
+    res = list(
+        {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
+    res = [tag for tag in res if tag in text]
 
-    #res = res[0:5]
     return res
 
 
@@ -416,8 +418,6 @@ def predict_tags_XGB_bert(df):
     input_vector = open_pca_bert().transform(df)
     res = model_xgb_bert.predict(input_vector)
     res = model_ml.inverse_transform(res)
-
-    res = res[0: 5]
     res = list(
         {tag for tag_list in res for tag in tag_list if (len(tag_list) != 0)})
     res = [tag for tag in res if tag in text]
