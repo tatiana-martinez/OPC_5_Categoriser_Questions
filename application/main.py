@@ -116,11 +116,11 @@ if pred == 'Supervised_XGBoost' and val_button:
 
     predict_5tags_XGB = predict_5tags_XGB(
         supervised_model_predict_proba_XGB, top_200_tags=top_200_tags())
-    st.write('Voici le résultat des 5 premiers tags par tokens : ',
+    st.write('Voici une proposition de tags avec leurs probabilités, en rapport avec votre question : ',
              predict_5tags_XGB)
 
     predict_tags_XGB = predict_tags_XGB(predict_5tags_XGB)
-    st.write('Voici le résultat des 5 premiers tags : ',
+    st.write('Voici une proposition de tags en rapport avec votre question : ',
              predict_tags_XGB)
 
     #top_200_tags = top_200_tags()
@@ -204,7 +204,7 @@ if pred == 'Supervised_SVM_Bert' and val_button:
 
     supervised_model_predict_alltags_svm_bert = predict_alltags_svm_bert(
         id_bert, clean_question)
-    st.write('Voici une liste de tags en rapport avec votre question : ',
+    st.write('Voici une proposition de tags en rapport avec votre question : ',
              supervised_model_predict_alltags_svm_bert)
 
     # bert = predict_tags_svm_bert(

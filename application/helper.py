@@ -5,6 +5,7 @@ import joblib
 import sklearn
 import numpy as np
 import collections
+import operator
 # import gensim
 # import gensim.corpora as corpora
 from nltk.stem import WordNetLemmatizer
@@ -402,37 +403,57 @@ def predict_proba_XGB(text):
     return ovc_xgb_preds_proba
 
 
+# def predict_5tags_XGB(predict_proba_XGB, top_200_tags):
+#    n = 5
+#    x = predict_proba_XGB.shape[0]
+#   model_XGB = open_supervised_model_XGB()
+
+#    top_n_lables_idx = np.argsort(-predict_proba_XGB, axis=1)[:, : n]
+#    top_n_lables_proba = np.round(-np.sort(-predict_proba_XGB), 3)[:, : n]
+#    top_n_labels = [model_XGB.classes_[i] for i in top_n_lables_idx]
+
+#    top200_tags_T = top_200_tags.T
+#    top_n_tags = [[top200_tags_T.iloc[0, top_n_labels[j][i]]
+#                   for i in range(0, n)] for j in range(0, x)]
+
+#    return top_n_tags
+
 def predict_5tags_XGB(predict_proba_XGB, top_200_tags):
     n = 5
     x = predict_proba_XGB.shape[0]
     model_XGB = open_supervised_model_XGB()
 
     top_n_lables_idx = np.argsort(-predict_proba_XGB, axis=1)[:, : n]
-    np.round(-np.sort(-predict_proba_XGB), 3)[:, : n]
+    top_n_lables_proba = np.round(-np.sort(-predict_proba_XGB), 3)[:, : n]
     top_n_labels = [model_XGB.classes_[i] for i in top_n_lables_idx]
 
     top200_tags_T = top_200_tags.T
     top_n_tags = [[top200_tags_T.iloc[0, top_n_labels[j][i]]
                    for i in range(0, n)] for j in range(0, x)]
+
+    flat_1_tags = [item[0] for item in top_n_tags]
+    flat_1_lables_proba = [item[0] for item in top_n_lables_proba]
+
+    dict_tags = dict(zip(flat_1_tags, flat_1_lables_proba))
+    sorted_dict_tags = dict(
+        sorted(dict_tags.items(), key=operator.itemgetter(1), reverse=True))
+
+    return sorted_dict_tags
+
+
+def predict_tags_XGB(sorted_dict_tags):
+    lst_tags = list(sorted_dict_tags.keys())
+    return lst_tags
+
+# def predict_tags_XGB(top_n_tags):
     # flat list
-    # flat_list = [item for sublist in top_n_tags for item in sublist]
+#    flat_list = [item for sublist in top_n_tags for item in sublist]
 
     # not duplicates in flat list
-    # notduplicates = [item for item,
-    #                 count in collections.Counter(flat_list).items() if count > 1]
+#    notduplicates = [item for item,
+#                     count in collections.Counter(flat_list).items() if count > 1]
 
-    return top_n_tags  # notduplicates
-
-
-def predict_tags_XGB(top_n_tags):
-    # flat list
-    flat_list = [item for sublist in top_n_tags for item in sublist]
-
-    # not duplicates in flat list
-    notduplicates = [item for item,
-                     count in collections.Counter(flat_list).items() if count > 1]
-
-    return notduplicates
+#    return flat_list, notduplicates
 
 
 def predict_tags_XGB_bert(df):
