@@ -9,3 +9,4 @@ pytorch-pretrained-bert==0.6.2
 streamlit==1.11.1
 torch==1.12.1
 xgboost==0.90
+gensim==3.8.3
