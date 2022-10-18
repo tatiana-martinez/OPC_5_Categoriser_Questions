@@ -1,4 +1,4 @@
-scikit_learn==1.1.1
+scikit-learn==1.1.1
 joblib==1.1.0
 Keras-Preprocessing==1.1.2
 nlp==0.4.0
@@ -6,6 +6,6 @@ nltk==3.7
 numpy==1.22.0
 pandas==1.4.3
 pytorch-pretrained-bert==0.6.2
-stremlit==1.11.1
+streamlit==1.11.1
 torch==1.12.1
 xgboost==0.90
