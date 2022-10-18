@@ -137,11 +137,11 @@ def input_id_bert(tokenized_texts):
 
 
 def open_model():
-    supervised_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/knn_model.pkl"
-    ml_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ml_model.pkl"
-    tfidf_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/tfidf_model.pkl"
-    pca_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/pca_model.pkl"
-    vocabulary = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/vocabulary.pkl"
+    supervised_model = "../models/knn_model.pkl"
+    ml_model = "../models/ml_model.pkl"
+    tfidf_model = "../models/tfidf_model.pkl"
+    pca_model = "../models/pca_model.pkl"
+    vocabulary = "../models/vocabulary.pkl"
 
     supervised_model = pickle.load(open(supervised_model, 'rb'))
     ml_model = pickle.load(open(ml_model, 'rb'))
@@ -152,94 +152,93 @@ def open_model():
 
 
 def open_model_tfidf():
-    tfidf_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/tfidf_model.pkl"
+    tfidf_model = "../models/tfidf_model.pkl"
     tfidf_model = pickle.load(open(tfidf_model, 'rb'))
     return tfidf_model
 
 
 def open_model_bert():
-    bert_model = torch.load(
-        '/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/bert_model')
+    bert_model = torch.load('../models/bert_model')
     return bert_model
 
 
 def open_vocabulary():
-    vocabulary = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/vocabulary.pkl"
+    vocabulary = "../models/vocabulary.pkl"
     vocabulary = pickle.load(open(vocabulary, 'rb'))
     return vocabulary
 
 
 def open_vocabulary_bert():
-    vocabulary_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/bert_vocab.pkl"
+    vocabulary_bert = "../models/bert_vocab.pkl"
     vocabulary_bert = pickle.load(open(vocabulary_bert, 'rb'))
     return vocabulary_bert
 
 
 def open_pca():
-    pca_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/pca_model.pkl"
+    pca_model = "../models/pca_model.pkl"
     pca_model = pickle.load(open(pca_model, 'rb'))
     return pca_model
 
 
 def open_pca_xgb_model():
-    pca_xgb_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/pca_tfidf_xgb_model.pkl"
+    pca_xgb_model = "../models/pca_tfidf_xgb_model.pkl"
     pca_xgb_model = pickle.load(open(pca_xgb_model, 'rb'))
     return pca_xgb_model
 
 
 def open_pca_bert():
-    pca_bert_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/pca_bert_model.pkl"
+    pca_bert_model = "../models/pca_bert_model.pkl"
     pca_bert_model = pickle.load(open(pca_bert_model, 'rb'))
     return pca_bert_model
 
 
 def open_supervised_model():
-    supervised_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/knn_model.pkl"
+    supervised_model = "../models/knn_model.pkl"
     supervised_model = pickle.load(open(supervised_model, 'rb'))
     return supervised_model
 
 
 def open_supervised_model_knn_bert():
-    supervised_model_knn_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/knn_model_bert1.pkl"
+    supervised_model_knn_bert = "../models/knn_model_bert1.pkl"
     supervised_model_knn_bert = pickle.load(
         open(supervised_model_knn_bert, 'rb'))
     return supervised_model_knn_bert
 
 
 def open_supervised_model_SVM():
-    supervised_model_SVM = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/svm_model.pkl"
+    supervised_model_SVM = "../models/svm_model.pkl"
     supervised_model_SVM = pickle.load(open(supervised_model_SVM, 'rb'))
     return supervised_model_SVM
 
 
 def open_supervised_model_svm_bert():
-    supervised_model_svm_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/svm_model_bert.pkl"
+    supervised_model_svm_bert = "../models/svm_model_bert.pkl"
     supervised_model_svm_bert = pickle.load(
         open(supervised_model_svm_bert, 'rb'))
     return supervised_model_svm_bert
 
 
 def open_supervised_model_XGB():
-    supervised_model_XGB = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/xgb_model_tf_idf_jb.joblib"
+    supervised_model_XGB = "../models/xgb_model_tf_idf_jb.joblib"
     supervised_model_XGB = joblib.load(open(supervised_model_XGB, 'rb'))
     return supervised_model_XGB
 
 
 def open_supervised_model_xgb_bert():
-    supervised_model_XGB_bert = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ovc_xgb_bert.pkl"
+    supervised_model_XGB_bert = "../models/ovc_xgb_bert.pkl"
     supervised_model_XGB_bert = pickle.load(
         open(supervised_model_XGB_bert, 'rb'))
     return supervised_model_XGB_bert
 
 
 def open_ml_model():
-    ml_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/ml_model.pkl"
+    ml_model = "../models/ml_model.pkl"
     ml_model = pickle.load(open(ml_model, 'rb'))
     return ml_model
 
 
 def top_200_tags():
-    top_200_tags = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/data/df_top200_tags.csv"
+    top_200_tags = "../data/df_top200_tags.csv"
     df_top_200_tags = pd.read_csv(top_200_tags)
     return df_top_200_tags
 
@@ -425,13 +424,13 @@ def predict_tags_XGB_bert(df):
 
 
 def open_lda_dictionary():
-    lda_dic = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/dictionary.pkl"
+    lda_dic = "../models/dictionary.pkl"
     lda_dic = pickle.load(open(lda_dic, 'rb'))
     return lda_dic
 
 
 def open_lda_model():
-    lda_model = "/Users/tatiana/OpenClass/projet5/OPC_5_Categoriser_Questions/models/lda_model.pkl"
+    lda_model = "../models/lda_model.pkl"
     lda_model = pickle.load(open(lda_model, 'rb'))
     return lda_model
 
