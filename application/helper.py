@@ -8,6 +8,9 @@ import collections
 import operator
 import os
 
+import gensim
+import gensim.corpora as corpora
+
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk import word_tokenize
