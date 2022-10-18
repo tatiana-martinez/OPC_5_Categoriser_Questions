@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-#from sklearn.neighbors import _dist_metrics
+
 from helper import text_cleaning
 from helper import tokenize
 from helper import lemmatizing
@@ -20,10 +20,8 @@ from helper import predict_tags_knn_bert
 from helper import tfidf_pca_XGB
 from helper import top_200_tags
 from helper import predict_tags_XGB
-#from helper import predict_tags_svm_bert
 from helper import predict_alltags_svm_bert
 from helper import predict_tags_XGB_bert
-#from helper import open_supervised_model_knn_bert
 from helper import pca_transform_knn_bert
 
 
@@ -123,10 +121,6 @@ if pred == 'Supervised_XGBoost' and val_button:
     st.write('Voici une proposition de tags en rapport avec votre question : ',
              predict_tags_XGB)
 
-    #top_200_tags = top_200_tags()
-    # st.write('Voici tags_200 : ',
-    #        top_200_tags)
-
 
 if pred == 'Unsupervised' and val_button:
 
@@ -207,10 +201,6 @@ if pred == 'Supervised_SVM_Bert' and val_button:
     st.write('Voici une proposition de tags en rapport avec votre question : ',
              supervised_model_predict_alltags_svm_bert)
 
-    # bert = predict_tags_svm_bert(
-    #    supervised_model_predict_alltags_svm_bert)
-    # st.write('Voici une proposition de tags en rapport avec votre question : ',
-    #         bert)
 
 if pred == 'Supervised_XGBoost_Bert' and val_button:
     clean_question = text_cleaning(question)
