@@ -5,7 +5,7 @@ from helper import text_cleaning
 from helper import tokenize
 from helper import lemmatizing
 from helper import filter_2type_wd
-from helper import open_model
+#from helper import open_model
 from helper import predict_tags
 from helper import open_lda_dictionary
 from helper import open_lda_model
@@ -23,6 +23,7 @@ from helper import predict_tags_XGB
 from helper import predict_alltags_svm_bert
 from helper import predict_tags_XGB_bert
 from helper import pca_transform_knn_bert
+from helper import open_ml_model
 
 
 st.title("Bienvenue sur votre outil de suggestion de tags!")

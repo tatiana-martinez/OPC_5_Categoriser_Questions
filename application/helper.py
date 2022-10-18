@@ -6,6 +6,8 @@ import sklearn
 import numpy as np
 import collections
 import operator
+import os
+
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk import word_tokenize
@@ -137,109 +139,193 @@ def input_id_bert(tokenized_texts):
     return df_input_ids
 
 
-def open_model():
-    supervised_model = "../models/knn_model.pkl"
-    ml_model = "../models/ml_model.pkl"
-    tfidf_model = "../models/tfidf_model.pkl"
-    pca_model = "../models/pca_model.pkl"
-    vocabulary = "../models/vocabulary.pkl"
+# def open_model():
+#    absolute_path = os.path.dirname(__file__)
+#    relative_path_supervised_model = "../models/knn_model.pkl"
+#    supervised_model = os.path.join(
+#        absolute_path, relative_path_supervised_model)
+#    #supervised_model = path+"../models/knn_model.pkl"
 
-    supervised_model = pickle.load(open(supervised_model, 'rb'))
-    ml_model = pickle.load(open(ml_model, 'rb'))
-    tfidf_model = pickle.load(open(tfidf_model, 'rb'))
-    pca_model = pickle.load(open(pca_model, 'rb'))
-    vocabulary = pickle.load(open(vocabulary, 'rb'))
-    return supervised_model, ml_model, tfidf_model, pca_model, vocabulary
+#    relative_path_ml_model = "../models/ml_model.pkl"
+#    ml_model = os.path.join(absolute_path, relative_path_ml_model)
+    #ml_model = path+"../models/ml_model.pkl"
+
+#    relative_path_tfidf_model = "../models/tfidf_model.pkl"
+#    tfidf_model = os.path.join(absolute_path, relative_path_tfidf_model)
+    #tfidf_model = path+"../models/tfidf_model.pkl"
+
+#    relative_path_pca_model = "../models/pca_model.pkl"
+#   pca_model = os.path.join(absolute_path, relative_path_pca_model)
+    #pca_model = path+"../models/pca_model.pkl"
+
+#    relative_path_vocabulary = "../models/vocabulary.pkl"
+#    vocabulary = os.path.join(absolute_path, relative_path_vocabulary)
+    #vocabulary = "../models/vocabulary.pkl"
+
+#    supervised_model = pickle.load(open(supervised_model, 'rb'))
+#    ml_model = pickle.load(open(ml_model, 'rb'))
+#    tfidf_model = pickle.load(open(tfidf_model, 'rb'))
+#    pca_model = pickle.load(open(pca_model, 'rb'))
+#    vocabulary = pickle.load(open(vocabulary, 'rb'))
+#    return supervised_model, ml_model, tfidf_model, pca_model, vocabulary
 
 
 def open_model_tfidf():
-    tfidf_model = "../models/tfidf_model.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_tfidf_model = "../models/tfidf_model.pkl"
+    tfidf_model = os.path.join(absolute_path, relative_path_tfidf_model)
+
+    #tfidf_model = path+"../models/tfidf_model.pkl"
     tfidf_model = pickle.load(open(tfidf_model, 'rb'))
     return tfidf_model
 
 
 def open_model_bert():
-    bert_model = torch.load('../models/bert_model')
+    absolute_path = os.path.dirname(__file__)
+    relative_path_bert_model = '../models/bert_model'
+    bert_model = os.path.join(absolute_path, relative_path_bert_model)
+
+    bert_model = torch.load(bert_model)
     return bert_model
 
 
 def open_vocabulary():
-    vocabulary = "../models/vocabulary.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_vocabulary = "../models/vocabulary.pkl"
+    vocabulary = os.path.join(absolute_path, relative_path_vocabulary)
+
+    #vocabulary = path+"../models/vocabulary.pkl"
     vocabulary = pickle.load(open(vocabulary, 'rb'))
     return vocabulary
 
 
 def open_vocabulary_bert():
-    vocabulary_bert = "../models/bert_vocab.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_vocabulary_bert = "../models/bert_vocab.pkl"
+    vocabulary_bert = os.path.join(
+        absolute_path, relative_path_vocabulary_bert)
+
+    #vocabulary_bert = path+"../models/bert_vocab.pkl"
     vocabulary_bert = pickle.load(open(vocabulary_bert, 'rb'))
     return vocabulary_bert
 
 
 def open_pca():
-    pca_model = "../models/pca_model.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_pca_model = "../models/pca_model.pkl"
+    pca_model = os.path.join(absolute_path, relative_path_pca_model)
+
+    #pca_model = path+"../models/pca_model.pkl"
     pca_model = pickle.load(open(pca_model, 'rb'))
     return pca_model
 
 
 def open_pca_xgb_model():
-    pca_xgb_model = "../models/pca_tfidf_xgb_model.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_pca_xgb_model = "../models/pca_tfidf_xgb_model.pkl"
+    pca_xgb_model = os.path.join(absolute_path, relative_path_pca_xgb_model)
+
+    #pca_xgb_model = path+"../models/pca_tfidf_xgb_model.pkl"
     pca_xgb_model = pickle.load(open(pca_xgb_model, 'rb'))
     return pca_xgb_model
 
 
 def open_pca_bert():
-    pca_bert_model = "../models/pca_bert_model.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_pca_xgb_model = "../models/pca_bert_model.pkl"
+    pca_bert_model = os.path.join(absolute_path, relative_path_pca_xgb_model)
+
+    #pca_bert_model = path+"../models/pca_bert_model.pkl"
     pca_bert_model = pickle.load(open(pca_bert_model, 'rb'))
     return pca_bert_model
 
 
 def open_supervised_model():
-    supervised_model = "../models/knn_model.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_supervised_model = "../models/knn_model.pkl"
+    supervised_model = os.path.join(
+        absolute_path, relative_path_supervised_model)
+
+    #supervised_model = path+"../models/knn_model.pkl"
     supervised_model = pickle.load(open(supervised_model, 'rb'))
     return supervised_model
 
 
 def open_supervised_model_knn_bert():
-    supervised_model_knn_bert = "../models/knn_model_bert1.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_supervised_model_knn_bert = "../models/knn_model_bert1.pkl"
+    supervised_model_knn_bert = os.path.join(
+        absolute_path, relative_path_supervised_model_knn_bert)
+
+    #supervised_model_knn_bert = path+"../models/knn_model_bert1.pkl"
     supervised_model_knn_bert = pickle.load(
         open(supervised_model_knn_bert, 'rb'))
     return supervised_model_knn_bert
 
 
 def open_supervised_model_SVM():
-    supervised_model_SVM = "../models/svm_model.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_supervised_model_SVM = "../models/svm_model.pkl"
+    supervised_model_SVM = os.path.join(
+        absolute_path, relative_path_supervised_model_SVM)
+
+    #supervised_model_SVM = path+"../models/svm_model.pkl"
     supervised_model_SVM = pickle.load(open(supervised_model_SVM, 'rb'))
     return supervised_model_SVM
 
 
 def open_supervised_model_svm_bert():
-    supervised_model_svm_bert = "../models/svm_model_bert.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_supervised_model_svm_bert = "../models/svm_model_bert.pkl"
+    supervised_model_svm_bert = os.path.join(
+        absolute_path, relative_path_supervised_model_svm_bert)
+
+    #supervised_model_svm_bert = path+"../models/svm_model_bert.pkl"
     supervised_model_svm_bert = pickle.load(
         open(supervised_model_svm_bert, 'rb'))
     return supervised_model_svm_bert
 
 
 def open_supervised_model_XGB():
-    supervised_model_XGB = "../models/xgb_model_tf_idf_jb.joblib"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_supervised_model_XGB = "../models/xgb_model_tf_idf_jb.joblib"
+    supervised_model_XGB = os.path.join(
+        absolute_path, relative_path_supervised_model_XGB)
+
+    #supervised_model_XGB = path+"../models/xgb_model_tf_idf_jb.joblib"
     supervised_model_XGB = joblib.load(open(supervised_model_XGB, 'rb'))
     return supervised_model_XGB
 
 
 def open_supervised_model_xgb_bert():
-    supervised_model_XGB_bert = "../models/ovc_xgb_bert.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_supervised_model_XGB_bert = "../models/ovc_xgb_bert.pkl"
+    supervised_model_XGB_bert = os.path.join(
+        absolute_path, relative_path_supervised_model_XGB_bert)
+
+    #supervised_model_XGB_bert = path+"../models/ovc_xgb_bert.pkl"
     supervised_model_XGB_bert = pickle.load(
         open(supervised_model_XGB_bert, 'rb'))
     return supervised_model_XGB_bert
 
 
 def open_ml_model():
-    ml_model = "../models/ml_model.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_ml_model = "../models/ml_model.pkl"
+    ml_model = os.path.join(
+        absolute_path, relative_path_ml_model)
+
+    #ml_model = path+"../models/ml_model.pkl"
     ml_model = pickle.load(open(ml_model, 'rb'))
     return ml_model
 
 
 def top_200_tags():
-    top_200_tags = "../data/df_top200_tags.csv"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_df_top_200_tags = "../data/df_top200_tags.csv"
+    top_200_tags = os.path.join(absolute_path, relative_path_df_top_200_tags)
+
+    #top_200_tags = absolute_path+"../data/df_top200_tags.csv"
     df_top_200_tags = pd.read_csv(top_200_tags)
     return df_top_200_tags
 
@@ -425,13 +511,19 @@ def predict_tags_XGB_bert(df):
 
 
 def open_lda_dictionary():
-    lda_dic = "../models/dictionary.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_lda_dic = '../models/dictionary.pkl'
+    lda_dic = os.path.join(absolute_path, relative_path_lda_dic)
+
     lda_dic = pickle.load(open(lda_dic, 'rb'))
     return lda_dic
 
 
 def open_lda_model():
-    lda_model = "../models/lda_model.pkl"
+    absolute_path = os.path.dirname(__file__)
+    relative_path_lda_model = "../models/lda_model.pkl"
+
+    lda_model = os.path.join(absolute_path, relative_path_lda_model)
     lda_model = pickle.load(open(lda_model, 'rb'))
     return lda_model
 
