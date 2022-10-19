@@ -10,7 +10,7 @@ import os
 #import os
 
 import gensim
-import gensim.corpora as corpora
+#import gensim.corpora as corpora
 
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
