@@ -4,10 +4,9 @@ import pickle
 import joblib
 import sklearn
 import numpy as np
-import collections
+#import collections
 import operator
 import os
-#import os
 
 import gensim
 #import gensim.corpora as corpora
