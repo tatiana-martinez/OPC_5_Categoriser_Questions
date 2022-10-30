@@ -1,6 +1,6 @@
 # OPC_5_Categoriser_Questions
 
-Application de suggestion de tags. Projet OpenClassRoom en partenariat avec Central Supelec.
+Application de suggestion de tags. Projet OpenClassRoom en partenariat avec CentraleSupelec.
 
 Après avoir entraîné des modèles en mode supervisé et non supervisé à l’aide de données issues de stackexchange (de stackoverflow), l’application propose tout d’abord de saisir sa question telle que l'utilisateur voudrait la soumettre à la communauté sur stackoverflow. 
 Les modèles appelées par l'application ont été entraînés grâce aux textes des titres des questions majoritairement postées de 2009 à 2018.
