@@ -5,7 +5,6 @@ from helper import text_cleaning
 from helper import tokenize
 from helper import lemmatizing
 from helper import filter_2type_wd
-#from helper import open_model
 from helper import predict_tags
 from helper import open_lda_dictionary
 from helper import open_lda_model
@@ -29,7 +28,7 @@ from helper import open_ml_model
 st.title("Bienvenue sur votre outil de suggestion de tags!")
 
 question = st.text_input(
-    "1. Veuillez saisir votre question dans la zone qui suit :", '')
+    "1. Veuillez saisir votre question Stackoverflow, UNIQUEMENT en ANGLAIS, dans la zone qui suit :", '')
 #st.write("**Votre question :**", question)
 
 pred_type = ['Unsupervised', 'Supervised_KNN',
@@ -42,7 +41,11 @@ pred = st.radio("2. Choix du type de prédiction :", pred_type)
 
 val_button = st.button('Valider')
 
-if pred == 'Supervised_KNN' and val_button:
+if val_button and question == "":
+    st.markdown(
+        f'<h1 style="color:#FF8C00;font-size:16px;font-weight: normal;">{"Veuillez saisir une question en anglais, dans la zone 1, pour obtenir une suggestion de tags."}</h1>', unsafe_allow_html=True)
+
+if pred == 'Supervised_KNN' and val_button and question != "":
 
     clean_question = text_cleaning(question)
     st.write('Votre question "cleaned" : ', clean_question)
@@ -64,7 +67,8 @@ if pred == 'Supervised_KNN' and val_button:
     st.write('Voici une proposition de tags en rapport avec votre question :: ',
              supervised_model_predict_tags)
 
-if pred == 'Supervised_SVM' and val_button:
+
+if pred == 'Supervised_SVM' and val_button and question != "":
 
     clean_question = text_cleaning(question)
     st.write('Votre question "cleaned" : ', clean_question)
@@ -86,7 +90,7 @@ if pred == 'Supervised_SVM' and val_button:
     st.write('Voici une proposition de tags en rapport avec votre question : ',
              supervised_model_predict_tags_SVM)
 
-if pred == 'Supervised_XGBoost' and val_button:
+if pred == 'Supervised_XGBoost' and val_button and question != "":
 
     clean_question = text_cleaning(question)
     st.write('Votre question "cleaned" : ', clean_question)
@@ -123,7 +127,7 @@ if pred == 'Supervised_XGBoost' and val_button:
              predict_tags_XGB)
 
 
-if pred == 'Unsupervised' and val_button:
+if pred == 'Unsupervised' and val_button and question != "":
 
     clean_question = text_cleaning(question)
     st.write('Votre question "cleaned" : ', clean_question)
@@ -146,7 +150,7 @@ if pred == 'Unsupervised' and val_button:
              unsupervised_model_predict_tags)
 
 #st.write('en construction')
-if pred == 'Supervised_KNN_Bert' and val_button:
+if pred == 'Supervised_KNN_Bert' and val_button and question != "":
     clean_question = text_cleaning(question)
 
     token_clean_question = tokenize(clean_question)
@@ -176,7 +180,7 @@ if pred == 'Supervised_KNN_Bert' and val_button:
     st.write('Voici une proposition de tags en rapport avec votre question : ',
              supervised_model_predict_tags_knn_bert)
 
-if pred == 'Supervised_SVM_Bert' and val_button:
+if pred == 'Supervised_SVM_Bert' and val_button and question != "":
     clean_question = text_cleaning(question)
 
     token_clean_question = tokenize(clean_question)
@@ -203,7 +207,7 @@ if pred == 'Supervised_SVM_Bert' and val_button:
              supervised_model_predict_alltags_svm_bert)
 
 
-if pred == 'Supervised_XGBoost_Bert' and val_button:
+if pred == 'Supervised_XGBoost_Bert' and val_button and question != "":
     clean_question = text_cleaning(question)
 
     token_clean_question = tokenize(clean_question)
